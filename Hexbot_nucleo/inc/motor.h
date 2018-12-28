@@ -10,5 +10,13 @@ void FillServoPositionString(void);
 void TransmitServoString();
 void RotatePositions(void);
 void EmptyMovementString(void);
+void SetForward();
+void SetStop();
+void SetReverse();
+void SetRotateLeft();
+void SetStopRotate();
+void SetRotateRight();
+void SetRun();
+void SetWalk();
 
 #endif /* ENGINE_H_ */

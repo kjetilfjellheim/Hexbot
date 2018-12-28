@@ -4,6 +4,8 @@
 
 void InitRobot(UART_HandleTypeDef uartSSC32U);
 
+void EngineTransfer();
 void WalkForward();
+void Start();
 
 #endif

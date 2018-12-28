@@ -9,23 +9,58 @@ void InitRobot(UART_HandleTypeDef uartSSC32U) {
 	InitServoPositions();
 }
 
-void WalkForward() {
+void Start() {
+	WalkForward();
+	SetRun();
+
 	/**
 	 * Start walking.
 	 */
 	while (1) {
-		/**
-		 * Sets the inital servo positions.
-		 */
-		FillServoPositionString();
-		/**
-		 * Transmit positions.
-		 */
-		TransmitServoString();
-		/**
-		 * Change servos to next position.
-		 */
-		RotatePositions();
+		EngineTransfer();
 	}
+}
+
+void WalkForward() {
+	/**
+	 * Set forward for motor control.
+	 */
+	SetForward();
+}
+
+void WalkReverse() {
+	/**
+	 * Set reverse for motor control.
+	 */
+	SetReverse();
+}
+
+void RotateLeft() {
+	/**
+	 * Set rotate left for motor control.
+	 */
+	SetRotateLeft();
+}
+
+void RotateRight() {
+	/**
+	 * Set rotate right for motor control.
+	 */
+	SetRotateRight();
+}
+
+void EngineTransfer() {
+	/**
+	 * Sets the inital servo positions.
+	 */
+	FillServoPositionString();
+	/**
+	 * Transmit positions.
+	 */
+	TransmitServoString();
+	/**
+	 * Change servos to next position.
+	 */
+	RotatePositions();
 }
 

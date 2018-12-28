@@ -23,6 +23,19 @@ typedef struct {
 	int horizontalMovement[POSITIONS];
 } Position;
 
+int rotation = 0; // 1 = Rotate right, 0 = Do not rotate, -1 = Rotate left
+int speed = 500;   //500 = Walk, 200 = Run
+int direction = 1; // 1 = Forward, 0 = Stop, -1 = Reverse
+
+const int FORWARD = 1;
+const int STOP = 0;
+const int REVERSE = -1;
+const int FAST = 200;
+const int SLOW = 500;
+const int LEFT = -1;
+const int NO_ROTATE = 0;
+const int RIGHT = 1;
+
 typedef struct {
 	unsigned int currentServoPosition;
 	char horizontalServo[3];
@@ -136,11 +149,46 @@ void FillServoPositionString(void) {
         sprintf(tmp, "%d", servosets[i].verticalLowerMediumPosition);
         strcat(movementString, tmp);
     }
-    strcat(movementString, "T500\r");
+    strcat(movementString, "T");
+    sprintf(tmp, "%d", speed);
+    strcat(movementString, tmp);
+    strcat(movementString, "\r");
 }
 
 void TransmitServoString() {
 	HAL_UART_Transmit(&engineUart, (uint8_t*) movementString, strlen(movementString), 0x012c);
-	HAL_Delay(400);
+	HAL_Delay(speed - 100);
+}
+
+void SetForward() {
+	direction = FORWARD;
+}
+
+void SetStop() {
+	direction = STOP;
+}
+
+void SetReverse() {
+	direction = REVERSE;
+}
+
+void SetRotateLeft() {
+	rotation = LEFT;
+}
+
+void SetStopRotate() {
+	rotation = NO_ROTATE;
+}
+
+void SetRotateRight() {
+	rotation = RIGHT;
+}
+
+void SetRun() {
+	speed = FAST;
+}
+
+void SetWalk() {
+	speed = SLOW;
 }
 
