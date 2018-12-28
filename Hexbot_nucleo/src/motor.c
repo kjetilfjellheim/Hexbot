@@ -11,7 +11,7 @@ UART_HandleTypeDef engineUart;
 /**
  *Positions durinmg movement.
  */
-#define POSITIONS 3
+#define POSITIONS 6
 
 /**
  * Each leg is a servoset.
@@ -35,15 +35,16 @@ typedef struct {
 	int multiplierVertical;
 } Servoset;
 
-const Position positions = { { -100, 200, -100 }, { -200, 0, 200 } };
+//const Position positions = { { -100, 200, -100 }, { -200, 0, 200 } };
+const Position positions = { { -100, -100, -100, -100, -100, 200 }, { 200, 100, 0, -100, -200, 0 } };
 
 /**
  * Current servoinformation for the servosets.
  */
 Servoset servosets[] = { { 0, "12", "1", "2", 1700, 2200, 1800, 1, 1 }, { 2,
-		"4", "5", "6", 1350, 1600, 1700, 1, 1 }, { 0, "8", "9", "10", 1000,
-		1600, 1800, 1, 1 }, { 2, "16", "17", "18", 1600, 1200, 1500, -1, -1 }, {
-		0, "20", "21", "22", 2100, 1300, 1000, -1, -1 }, { 2, "24", "25", "26",
+		"4", "5", "6", 1350, 1600, 1700, 1, 1 }, { 4, "8", "9", "10", 1000,
+		1600, 1800, 1, 1 }, { 5, "16", "17", "18", 1600, 1200, 1500, -1, -1 }, {
+		3, "20", "21", "22", 2100, 1300, 1000, -1, -1 }, { 1, "24", "25", "26",
 		1900, 1400, 1000, -1, -1 } };
 
 char movementString[MAX_MOVEMENT_STRING_LENGTH] = "";
@@ -135,11 +136,11 @@ void FillServoPositionString(void) {
         sprintf(tmp, "%d", servosets[i].verticalLowerMediumPosition);
         strcat(movementString, tmp);
     }
-    strcat(movementString, "T1000\r");
+    strcat(movementString, "T500\r");
 }
 
 void TransmitServoString() {
 	HAL_UART_Transmit(&engineUart, (uint8_t*) movementString, strlen(movementString), 0x012c);
-	HAL_Delay(1000);
+	HAL_Delay(400);
 }
 
