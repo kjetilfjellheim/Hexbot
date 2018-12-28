@@ -11,8 +11,8 @@ void InitRobot(UART_HandleTypeDef uartSSC32U) {
 
 void Start() {
 	WalkForward();
-	SetRun();
-
+	SetWalk();
+	SetRotateLeft();
 	/**
 	 * Start walking.
 	 */

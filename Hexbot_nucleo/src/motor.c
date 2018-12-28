@@ -46,6 +46,7 @@ typedef struct {
 	int verticalLowerMediumPosition;
 	int multiplierHorizontal;
 	int multiplierVertical;
+	int side;
 } Servoset;
 
 //const Position positions = { { -100, 200, -100 }, { -200, 0, 200 } };
@@ -54,11 +55,12 @@ const Position positions = { { -100, -100, -100, -100, -100, 200 }, { 200, 100, 
 /**
  * Current servoinformation for the servosets.
  */
-Servoset servosets[] = { { 0, "12", "1", "2", 1700, 2200, 1800, 1, 1 }, { 2,
-		"4", "5", "6", 1350, 1600, 1700, 1, 1 }, { 4, "8", "9", "10", 1000,
-		1600, 1800, 1, 1 }, { 5, "16", "17", "18", 1600, 1200, 1500, -1, -1 }, {
-		3, "20", "21", "22", 2100, 1300, 1000, -1, -1 }, { 1, "24", "25", "26",
-		1900, 1400, 1000, -1, -1 } };
+Servoset servosets[] = { { 0, "12", "1", "2", 1700, 2200, 1800, 1, 1, -1 },
+						 { 2, "4", "5", "6", 1350, 1600, 1700, 1, 1, -1 },
+						 { 4, "8", "9", "10", 1000, 1600, 1800, 1, 1, -1 },
+						 { 5, "16", "17", "18", 1600, 1200, 1500, -1, -1, 1 },
+						 { 3, "20", "21", "22", 2100, 1300, 1000, -1, -1, 1 },
+						 { 1, "24", "25", "26", 1900, 1400, 1000, -1, -1, 1 } };
 
 char movementString[MAX_MOVEMENT_STRING_LENGTH] = "";
 
@@ -111,11 +113,21 @@ void InitServoPositions(void) {
 
 
 void RotatePositions() {
-	for (unsigned int i = 0; i < SERVOSETS; i++) {
-		if (servosets[i].currentServoPosition < (POSITIONS - 1)) {
-			servosets[i].currentServoPosition += 1;
-		} else {
-			servosets[i].currentServoPosition = 0;
+	if (direction == FORWARD) {
+		for (unsigned int i = 0; i < SERVOSETS; i++) {
+			if (servosets[i].currentServoPosition < (POSITIONS - 1)) {
+				servosets[i].currentServoPosition += 1;
+			} else {
+				servosets[i].currentServoPosition = 0;
+			}
+		}
+	} else if (direction == REVERSE) {
+		for (unsigned int i = 0; i < SERVOSETS; i++) {
+			if (servosets[i].currentServoPosition > 1) {
+				servosets[i].currentServoPosition -= 1;
+			} else {
+				servosets[i].currentServoPosition = POSITIONS - 1;
+			}
 		}
 	}
 }
@@ -133,7 +145,7 @@ void FillServoPositionString(void) {
         strcat(movementString, servosets[i].horizontalServo);
         strcat(movementString, "P");
         int deltaHorizontal = positions.horizontalMovement[servosets[i].currentServoPosition] * servosets[i].multiplierHorizontal;
-        int newHorizontalPosition = servosets[i].horizontalMediumPosition + deltaHorizontal;
+        int newHorizontalPosition = servosets[i].horizontalMediumPosition + (deltaHorizontal * getRotation(servosets[i].side));
         sprintf(tmp, "%d", newHorizontalPosition);
         strcat(movementString, tmp);
         strcat(movementString, "#");
@@ -192,3 +204,13 @@ void SetWalk() {
 	speed = SLOW;
 }
 
+
+int getRotation(int side) {
+	if (rotation == NO_ROTATE) {
+		return 1;
+	} else if (rotation == LEFT) {
+		return LEFT * side;
+	} else {
+		return RIGHT * side;
+	}
+}

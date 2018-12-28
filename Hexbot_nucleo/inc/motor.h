@@ -6,6 +6,7 @@
 
 void InitMotorCommunication(UART_HandleTypeDef huart);
 void InitServoPositions(void);
+int getRotation(int side);
 void FillServoPositionString(void);
 void TransmitServoString();
 void RotatePositions(void);
@@ -18,5 +19,4 @@ void SetStopRotate();
 void SetRotateRight();
 void SetRun();
 void SetWalk();
-
 #endif /* ENGINE_H_ */
